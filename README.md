@@ -1,1 +1,1 @@
-# C ile Amerika yı yeniden keşfet
+# C basic functions
