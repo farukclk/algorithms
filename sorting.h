@@ -65,14 +65,10 @@ void selectionSort(int dizi[], int n) {
 
 // Node or Node2
 int is_sorted_iterative(Node *list) {
- 
-    int first, second;
 
     while(list->next != NULL) {
-        first = list->sayi;
-        second = list->next->sayi;
 
-        if (first > second)
+        if (list->sayi > list->next->sayi)
             return 0;
         else
             list = list->next;
@@ -86,7 +82,7 @@ int is_sorted_iterative(Node *list) {
 
 // Node or Node2
 // like selection sort
-int is_sorted_recursive (Node *list) {
+int is_sorted_recursive(Node *list) {
 
     if (list->next == NULL) {
         return 1;
@@ -112,7 +108,7 @@ int is_sorted_recursive (Node *list) {
 
 
 // usage: mergeSort(arr, 0, length - 1 )
-void mergeSort(int arr[], int l, int r) {
+void merge_sort(int arr[], int l, int r) {
 
     if (r == l) {
         return ;
@@ -120,8 +116,8 @@ void mergeSort(int arr[], int l, int r) {
 
     int middle = (r + l) / 2 ;
 
-    mergeSort(arr, l, middle);
-    mergeSort(arr, middle + 1, r);
+    merge_sort(arr, l, middle);
+    merge_sort(arr, middle + 1, r);
 
 
     //---------------------- MERGE OPERATION --------------------------

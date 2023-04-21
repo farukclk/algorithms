@@ -6,12 +6,13 @@
 
 int basamak_sayisi(int sayi);              // sayinin basamak sayisi
 int bolen_derecesi(int sayi, int bolen);
+int decimal_to_binary(int sayi, int us);
 int get_random(int min, int max);          // generate random int between 2 number
 int is_harshad_num(int sayi);
 int is_lasa_num(int sayi);
 int is_prime(int sayi);                    // check num if num is prime
 int is_tau_num(int sayi);
-int rev_int(int sayi, int derece);         // derece = basamak_sayisi(sayi) - 1
+int ters_cevir(int sayi);                  
 int uslu_sayi(int sayi, int us);
 //-----------------------------------------------------------------------------------------
 
@@ -147,24 +148,13 @@ int is_harshad_num(int sayi) {
 
 
 // sayiyi ters cevir
-// ters_sayi(1234, basamak_sayisi(1234) - 1 ) = 4321
-//fonksiyonu cagirirken "derece = basamak_sayisi(sayi) - 1" olmali
-// bagimliliklar: basamak_sayisi()
-int rev_int(int sayi, int derece) {
-
-    int sonuc = 0 ;
-
-    if (sayi < 10) {
-        sonuc += sayi ;
+int ters_cevir(int sayi) {
+    int sonuc = 0;
+    while (sayi != 0) {
+        sonuc = sonuc * 10 + sayi % 10;
+        sayi = sayi / 10;
     }
-    else {
-
-        sonuc += (sayi % 10) * uslu_sayi(10, derece);
-        sonuc += rev_int(sayi / 10, derece - 1);
-    }
-
     return sonuc;
-
 }
 
 
@@ -187,5 +177,25 @@ int uslu_sayi(int sayi, int us) {
 
 
 
+// us = 0
+int decimal_to_binary(int sayi, int us ) {
+   int binary = 0;
 
+   if (sayi == 0) {
+       return 0;
+   }
 
+   int kalan = sayi % 2;
+   int bolum = sayi / 2;
+
+   if (bolum == 0 && kalan == 1) {
+       return 1 * uslu_sayi(10, us);
+   }
+   else {
+       binary += ikilik_sayi(sayi / 2, us + 1);
+
+       binary += kalan * uslu_sayi(10, us);
+
+   }
+    return binary;
+}

@@ -10,18 +10,18 @@ typedef struct treeNode {
 
 
 
-int getLevel(int length);                    // calculate level of binary tree using number of items
-int getLevelOf(TreeNode *root);              // calculate level of binary tree
-int getRootIndex(int length);
-TreeNode *tree(int array[], int length);     // generate binary tree from int array[]
-void printTree(TreeNode *root);
+int get_level(int length);                     // calculate level of full and complate binary trees using number of items
+int get_level_of(TreeNode *root);              // calculate level of binary tree
+int get_root_index(int length);                // return root index as a full or complate binary tree
+TreeNode *tree(int array[], int length);       // generate binary tree from int array[]
+void print_tree(TreeNode *root);
 int aralikta_olmayan_eleman_sayisi(TreeNode *root, int min, int max);
 
 
 
 // calculate the level of binary tree using item number
 // dependents: uslu_sayi()
-int getLevel(int length) {
+int get_level(int length) {
     int level = 0;
 
     while(1) {
@@ -38,7 +38,7 @@ int getLevel(int length) {
 
 
 // calculate the level of binary tree
-int getLevelOf(TreeNode *root) {
+int get_level_of(TreeNode *root) {
     int right, left;
     if (root->left == NULL  && root->right == NULL) {
         return 0;
@@ -49,12 +49,12 @@ int getLevelOf(TreeNode *root) {
 
         // calculate left fork
         if (root->left != NULL  ) {
-            left = getLevelOf(root->left);
+            left = get_level_of(root->left);
         }
 
         //calculate right fork
         if (root->right != NULL) {
-            right = getLevelOf(root->right);
+            right = get_level_of(root->right);
         }
 
         // select bigger one and increase 1
@@ -70,9 +70,9 @@ int getLevelOf(TreeNode *root) {
 
 // print level by level from (int level) to root (0)
 //   you have to set up tmpLevel as 0 when you call this function.
-// printLevel(root, 0, getLevelOf(root);
-// dependents: getLevelOf()
-void printLevel(TreeNode *root, int tmpLevel, int level) {
+// printLevel(root, 0, get_level_of(root);
+// dependents: get_level_of()
+void print_level(TreeNode *root, int tmpLevel, int level) {
 
     // print leaf
     if (tmpLevel == level) {
@@ -82,17 +82,17 @@ void printLevel(TreeNode *root, int tmpLevel, int level) {
     else if (tmpLevel < level) {
 
         if (root->left != NULL) {
-            printLevel(root->left, tmpLevel + 1 , level);
+            print_level(root->left, tmpLevel + 1 , level);
         }
 
         if (root->right !=NULL ) {
-            printLevel(root->right, tmpLevel + 1, level);
+            print_level(root->right, tmpLevel + 1, level);
         }
 
 
         /* this block runs only on the root node. */
         if (tmpLevel == 0) {
-            printLevel(root, 0, level - 1);  // items which level equals level has been writed, now write (level -1 ) items
+            print_level(root, 0, level - 1);  // items which level equals level has been writed, now write (level -1 ) items
         }
 
     }
@@ -112,7 +112,7 @@ int getRootIndex(int length) {
     int index;
     int ust_ucgen_eleman_sayisi;  // level -1 e kadar olan tum elemanlar toplami
 
-    int level = getLevel(length); // eleman sayisindan binary tree levelini hesapla
+    int level = get_level(length); // eleman sayisindan binary tree levelini hesapla
 
     ust_ucgen_eleman_sayisi = uslu_sayi(2, level ) -1;
 
@@ -133,6 +133,10 @@ int getRootIndex(int length) {
 
 // sirali bir int array[] i  binary tree ye donustur
 TreeNode *tree(int dizi[], int length) {
+
+    if (length < 0)
+        return 0;
+
     TreeNode *root = (TreeNode*) malloc(sizeof(TreeNode));
 
     if (length == 1) {
@@ -157,8 +161,8 @@ TreeNode *tree(int dizi[], int length) {
         root->sayi = dizi[root_index];
 
         // root a gore
-        int *sol_dizi = (int *) malloc(sizeof(int)*333);
-        int *sag_dizi = (int *) malloc(sizeof(int)*433);
+        int *sol_dizi = (int *) malloc(sizeof(int));
+        int *sag_dizi = (int *) malloc(sizeof(int));
 
         int key = 0, sol_index=0, sag_index =0;
 
