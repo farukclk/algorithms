@@ -15,6 +15,7 @@ typedef struct node2 {
 
 //---------------------------------------FUNCTIONS----------------------------------------
 
+void bubble_sort(int arr[], int length);
 Node2 *liste_basi(Node2 *list);                // return first node of list
 void selectionSort(int array[], int length);   
 int is_sorted_recursive (Node *list);
@@ -24,6 +25,22 @@ void quick_sort(int array[], int l, int r);
 int partition(int array[], int l, int r);      // part of quick_sort()
 //-----------------------------------------------------------------------------------------
 
+
+
+
+
+void bubble_sort(int arr[], int length) {
+    int tmp = 0;
+    for (int i = 0; i < length - 1; i++) {
+        for (int j = 0; j < length -2 -i; j++) {
+            if (arr[j+1] > arr[j]) {
+                tmp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = tmp;
+            }
+        }
+    }
+}
 
 
 

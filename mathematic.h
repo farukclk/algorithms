@@ -12,20 +12,20 @@ int is_harshad_num(int sayi);
 int is_lasa_num(int sayi);
 int is_prime(int sayi);                    // check num if num is prime
 int is_tau_num(int sayi);
-int ters_cevir(int sayi);                  
-int uslu_sayi(int sayi, int us);
+int rev_int(int sayi);                  
+int pow_int(int sayi, int us);
 //-----------------------------------------------------------------------------------------
 
 
 
 
 // sayinin kac basamakli oldugunu hesapla
-// bagimliliklar: uslu_sayi()
+// bagimliliklar: pow_int()
 int basamak_sayisi(int sayi) {
     int basamak = 1;
 
     while (1) {
-        if (sayi < uslu_sayi(10, basamak)) {
+        if (sayi < pow_int(10, basamak)) {
             break;
         }
         basamak++;
@@ -61,16 +61,16 @@ int get_random(int lower, int upper) {
 
 
 
-// sayi lasa sayisi mi kontrol et
-int is_lasa_num(int sayi) {
+// check if num is a lasa number
+int is_lasa_num(int num) {
 
-    // istisnalar
-    if (sayi <10)
+    // exection
+    if (num <10)
         return 0;
 
-    int ters = rev_int(sayi, basamak_sayisi(sayi)-1);
+    int reverse = rev_int(num);
 
-    if (is_prime(sayi) && is_prime(ters))
+    if (is_prime(num) && is_prime(reverse))
         return 1;
     return 0;
 }
@@ -83,13 +83,13 @@ int is_prime(int sayi) {
     if (sayi < 2)
         return 0;
 
-    int bolen_Sayisi = 0;
-    for (int i = 2; i <= sayi; i++) {
+    int bolen_sayisi = 0;
+    for (int i = 2; i < sayi; i++) {
         if (sayi % i == 0)
-            bolen_Sayisi++;
+            bolen_sayisi++;
     }
 
-    if (bolen_Sayisi == 1)
+    if (bolen_sayisi == 0)
         return 1;
     return 0;
 
@@ -147,31 +147,32 @@ int is_harshad_num(int sayi) {
 
 
 
-// sayiyi ters cevir
-int ters_cevir(int sayi) {
-    int sonuc = 0;
-    while (sayi != 0) {
-        sonuc = sonuc * 10 + sayi % 10;
-        sayi = sayi / 10;
+// reverse integer
+int rev_int(int num) {
+    int result = 0;
+    while (num != 0) {
+        result = result * 10 + result % 10;
+        result = result / 10;
     }
-    return sonuc;
+    return result;
 }
 
 
 
 
-// ustlu sayi hesapla
-int uslu_sayi(int sayi, int us) {
-    //istisnalar
-    if (sayi == 0)
+// evaluate exponential numbers
+// power must be int
+int pow_int(int num, int power) {
+    // exception
+    if (num == 0)
         return 0;
 
-    // genel işlem
-    int sonuc = 1;
-    for (int i = 0; i< us;i++) {
-        sonuc *= sayi;
+    // general calculations
+    int result = 1;
+    for (int i = 0; i< power;i++) {
+        result *= result;
     }
-    return sonuc;
+    return result;
 }
 
 
@@ -189,12 +190,12 @@ int decimal_to_binary(int sayi, int us ) {
    int bolum = sayi / 2;
 
    if (bolum == 0 && kalan == 1) {
-       return 1 * uslu_sayi(10, us);
+       return 1 * pow_int(10, us);
    }
    else {
-       binary += ikilik_sayi(sayi / 2, us + 1);
+       binary += decimal_to_binary(sayi / 2, us + 1);
 
-       binary += kalan * uslu_sayi(10, us);
+       binary += kalan * pow_int(10, us);
 
    }
     return binary;

@@ -9,23 +9,28 @@ typedef struct treeNode {
 } TreeNode;
 
 
+//---------------------------------------FUNCTIONS----------------------------------------
 
-int get_level(int length);                     // calculate level of full and complate binary trees using number of items
-int get_level_of(TreeNode *root);              // calculate level of binary tree
-int get_root_index(int length);                // return root index as a full or complate binary tree
-TreeNode *tree(int array[], int length);       // generate binary tree from int array[]
-void print_tree(TreeNode *root);
+int get_level(int length);                          // calculate level of full and complate binary trees using number of items
+int get_level_of(TreeNode *root);                   // calculate level of binary tree
+int get_root_index(int length);                     // return root index as a full or complate binary tree
+TreeNode *tree(int array[], int length);            // generate binary tree from int array[]
+void print_tree(TreeNode *root);                    // print binary tree level order
+void print_tree2(TreeNode *root, int tmp, int level);
+void print_level(TreeNode *root, int level, int tmp);
 int aralikta_olmayan_eleman_sayisi(TreeNode *root, int min, int max);
+//-----------------------------------------------------------------------------------------
 
 
 
-// calculate the level of binary tree using item number
-// dependents: uslu_sayi()
+
+// calculate the tree level, using number of items
+// dependents: pow_int()
 int get_level(int length) {
     int level = 0;
 
     while(1) {
-        if (length < uslu_sayi(2 , level)) {
+        if (length < pow_int(2 , level)) {
             level--;
             break;
         }
@@ -34,6 +39,7 @@ int get_level(int length) {
     }
     return level;
 }
+
 
 
 
@@ -68,42 +74,9 @@ int get_level_of(TreeNode *root) {
 
 
 
-// print level by level from (int level) to root (0)
-//   you have to set up tmpLevel as 0 when you call this function.
-// printLevel(root, 0, get_level_of(root);
-// dependents: get_level_of()
-void print_level(TreeNode *root, int tmpLevel, int level) {
-
-    // print leaf
-    if (tmpLevel == level) {
-        printf("%d  ",root->sayi);
-    }
-
-    else if (tmpLevel < level) {
-
-        if (root->left != NULL) {
-            print_level(root->left, tmpLevel + 1 , level);
-        }
-
-        if (root->right !=NULL ) {
-            print_level(root->right, tmpLevel + 1, level);
-        }
-
-
-        /* this block runs only on the root node. */
-        if (tmpLevel == 0) {
-            print_level(root, 0, level - 1);  // items which level equals level has been writed, now write (level -1 ) items
-        }
-
-    }
-}
-
-
-
-
 
 // calculate the root index of sorted list using length
-// bagimliliklar: uslu_sayi()
+// bagimliliklar: pow_int()
 int getRootIndex(int length) {
     if (length == 1)
         return 0;
@@ -114,13 +87,13 @@ int getRootIndex(int length) {
 
     int level = get_level(length); // eleman sayisindan binary tree levelini hesapla
 
-    ust_ucgen_eleman_sayisi = uslu_sayi(2, level ) -1;
+    ust_ucgen_eleman_sayisi = pow_int(2, level ) -1;
 
     // System.out.println("level :" +level);
     //System.out.println("ust ucgen eleman sayi: "  +ust_ucgen_eleman_sayisi);
 
-    if ((length - ust_ucgen_eleman_sayisi ) > uslu_sayi(2, level-1) ) {
-        index = (ust_ucgen_eleman_sayisi-1) / 2 + uslu_sayi(2,level-1);
+    if ((length - ust_ucgen_eleman_sayisi ) > pow_int(2, level-1) ) {
+        index = (ust_ucgen_eleman_sayisi-1) / 2 + pow_int(2,level-1);
     }
     else {
         index = (ust_ucgen_eleman_sayisi-1) /2 + (length-ust_ucgen_eleman_sayisi);
@@ -128,6 +101,7 @@ int getRootIndex(int length) {
 
     return index;
 }
+
 
 
 
@@ -188,16 +162,76 @@ TreeNode *tree(int dizi[], int length) {
 
 
 
-// print tree from root
-void printTree(TreeNode *root) {
-    if (root == NULL)
-        return;
 
-    printf("  %d   \n", root->sayi);
-    printTree(root->left);
-    printTree(root->right);
+// print items by level 
+// you have to set up tmpLevel as 0 when you call this function.
+void print_level(TreeNode *root, int level, int tmpLevel) {
+
+    // print leaf
+    if (tmpLevel == level) {
+        printf("%d  ",root->sayi);
+    }
+
+    else {
+        if (root->left != NULL) {
+            print_level(root->left, level, tmpLevel + 1);
+        }
+
+        if (root->right !=NULL ) {
+            print_level(root->right, level,  tmpLevel + 1);
+        }
+    }
+}
+
+
+
+
+// print items base level order
+// you have to set up tmpLevel as 0 when you call this function.
+// dependents: get_level_of()
+void print_tree(TreeNode *root) {
+
+    int level =  get_level_of(root);
+
+    for (int i = 0; i <=  level; i++) {
+        print_level(root, i, 0);
+        printf("\n");
+    }
 
 }
+
+
+
+
+// print items as reverse level order
+// you have to set up tmpLevel as 0 when you call this function.
+// printLevel(root, 0, get_level_of(root);
+// dependents: get_level_of()
+void print_tree2(TreeNode *root, int tmpLevel, int level) {
+
+    // print leaf
+    if (tmpLevel == level) {
+        printf("%d  ",root->sayi);
+    }
+
+    else if (tmpLevel < level) {
+
+        if (root->left != NULL) {
+            print_tree2(root->left, tmpLevel + 1 , level);
+        }
+
+        if (root->right !=NULL ) {
+            print_tree2(root->right, tmpLevel + 1, level);
+        }
+
+
+        /* this block runs only on the root node. */
+        if (tmpLevel == 0) {
+            print_tree2(root, 0, level - 1);  // items which level equals level has been writed, now write (level -1 ) items
+        }
+    }
+}
+
 
 
 
