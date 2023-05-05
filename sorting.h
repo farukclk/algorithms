@@ -1,26 +1,16 @@
 #include <malloc.h>
-// tek yonlu node
-typedef struct node {
-    int sayi;
-    struct node *next;
-} Node;
-
-// cift yonlu node
-typedef struct node2 {
-    int sayi;
-    struct node2 *prev;
-    struct node2 *next;
-} Node2;
+#include "data.h"
 
 
 //---------------------------------------FUNCTIONS----------------------------------------
 
-void bubble_sort(int arr[], int length);
+void bubble_sort(int *arr, int length);
 Node2 *liste_basi(Node2 *list);                // return first node of list
-void selectionSort(int array[], int length);   
+int heapfiy(TreeNode *root);
 int is_sorted_recursive (Node *list);
 int is_sorted_iterative(Node *list);
 void merge_sort(int array[], int l, int r);
+void selectionSort(int array[], int length); 
 void quick_sort(int array[], int l, int r);
 int partition(int array[], int l, int r);      // part of quick_sort()
 //-----------------------------------------------------------------------------------------
@@ -29,11 +19,11 @@ int partition(int array[], int l, int r);      // part of quick_sort()
 
 
 
-void bubble_sort(int arr[], int length) {
+void bubble_sort(int *arr, int length) {
     int tmp = 0;
     for (int i = 0; i < length - 1; i++) {
         for (int j = 0; j < length -2 -i; j++) {
-            if (arr[j+1] > arr[j]) {
+            if (arr[j] > arr[j + 1]) {
                 tmp = arr[j];
                 arr[j] = arr[j+1];
                 arr[j+1] = tmp;
@@ -56,25 +46,66 @@ Node2 *liste_basi(Node2 *list) {
 
 
 
-// array[] sirala.  n = dizi uzunlugu. n verilmek zorunda yoksa NULL lar 0 olarak en basa siralanair
-void selectionSort(int dizi[], int n) {
+// Min-Heap
+// part of heap sort algorithm
+int heapfiy(TreeNode *root) {
+    int tmp;
+    int key;
 
-    int tmp, min_index;
-    for (int i=0; i<n; i++) {
-
-        min_index = i;
-        for (int j = i; j<n; j++) {
-            if (dizi[j] < dizi[min_index]) {
-                min_index = j;
-            }
-        }
-
-        tmp = dizi[i];
-        dizi[i] = dizi[min_index];
-        dizi[min_index] = tmp;
-        
+    if (root == NULL) {
+        return 0;
     }
 
+    // yapraksa, iki taraf null oldugu durum, kıasy yapıcak baska eleman yok
+    if (root->left == NULL && root->right == NULL) {
+        return 0;
+    }
+
+    // sag null ise
+    else if(root->left != NULL  && root->right == NULL) {
+         if (root->left->data < root->data) {
+             tmp = root->data;
+             root->data = root->left->data;
+             root->left->data = tmp;
+             return 1;
+         }
+         else
+             return 0;
+    }
+
+
+    // iki tarf dolu ise
+    else {
+
+        do {
+            key = 0;
+            // uclu karsilastirmalari yap
+
+            // left node en kucuk ise
+            if (root->left->data < root->right->data &&  root->left->data < root->data) {
+                tmp = root->data;
+                root->data = root->left->data;
+                root->left->data = tmp;
+                key = 1;
+            }
+                // right node en kucuk ise
+            else if (root->left->data > root->right->data &&  root->right->data < root->data) {
+                tmp = root->data;
+                root->data = root->right->data;
+                root->right->data = tmp;
+                key = 1;
+            }
+
+            // subtree lere gec
+            if (root->left != NULL)
+                key += heapfiy(root->left);
+            if (root->right != NULL)
+                key += heapfiy(root->right);
+
+        } while (key > 0);
+
+    }
+    return 0;
 }
 
 
@@ -85,7 +116,7 @@ int is_sorted_iterative(Node *list) {
 
     while(list->next != NULL) {
 
-        if (list->sayi > list->next->sayi)
+        if (list->data > list->next->data)
             return 0;
         else
             list = list->next;
@@ -109,9 +140,9 @@ int is_sorted_recursive(Node *list) {
             return 0;
     }
 
-    int first = list->sayi;
+    int first = list->data;
     while(list != NULL) {
-        if (first > list->sayi ) {
+        if (first > list->data ) {
             return 0;
         }
 
@@ -176,7 +207,32 @@ void merge_sort(int arr[], int l, int r) {
 
 
 
+// array[] sirala.  n = dizi uzunlugu. n verilmek zorunda yoksa NULL lar 0 olarak en basa siralanair
+void selectionSort(int dizi[], int n) {
+
+    int tmp, min_index;
+    for (int i=0; i<n; i++) {
+
+        min_index = i;
+        for (int j = i; j<n; j++) {
+            if (dizi[j] < dizi[min_index]) {
+                min_index = j;
+            }
+        }
+
+        tmp = dizi[i];
+        dizi[i] = dizi[min_index];
+        dizi[min_index] = tmp;
+        
+    }
+
+}
+
+
+
+
 // sort only one number(pivot)
+// part of merge sort algorithm
 int partition(int arr[], int l, int r) {
 
     if ( l >= r )

@@ -1,25 +1,52 @@
 #include <stdio.h>
 #include "mathematic.h"
+#include "sorting.h"
 
-// binary tree node
-typedef struct treeNode {
-    int sayi;
-    struct treeNode *left;
-    struct treeNode *right;
-} TreeNode;
 
 
 //---------------------------------------FUNCTIONS----------------------------------------
 
-int get_level(int length);                          // calculate level of full and complate binary trees using number of items
-int get_level_of(TreeNode *root);                   // calculate level of binary tree
-int get_root_index(int length);                     // return root index as a full or complate binary tree
-TreeNode *tree(int array[], int length);            // generate binary tree from int array[]
-void print_tree(TreeNode *root);                    // print binary tree level order
+int aralikta_olmayan_eleman_sayisi(TreeNode *root, int min, int max);
+TreeNode *create_BST(int *dizi, int length);
+TreeNode *create_tree(int *dizi, int length);           // generate binary tree from int array[]
+int length_of_BT(TreeNode *root);
+int get_level(int length);                              // calculate level of full and complated binary trees using number of items
+int get_level_of(TreeNode *root);                       // calculate level of binary tree
+int get_root_index(int length);                         // return root index as a full or complate binary tree
+void print_tree(TreeNode *root);                        // print binary tree level order
 void print_tree2(TreeNode *root, int tmp, int level);
 void print_level(TreeNode *root, int level, int tmp);
-int aralikta_olmayan_eleman_sayisi(TreeNode *root, int min, int max);
+TreeNode *root_sil(TreeNode *tree);
 //-----------------------------------------------------------------------------------------
+
+
+
+
+// binary tree deki 2 sayi asarisnda olmayan eleman sayisini bul
+int aralikta_olmayan_eleman_sayisi(TreeNode *root, int min, int max) {
+    if (root == NULL)
+        return 0;
+
+    int sonuc = 0;
+
+    if(root->data < min  || root->data > max)
+        sonuc++;
+
+
+    sonuc += aralikta_olmayan_eleman_sayisi(root->left, min, max);
+    sonuc += aralikta_olmayan_eleman_sayisi(root->right, min, max);
+
+    return sonuc;
+
+}
+
+
+
+
+TreeNode *create_BST(int *dizi, int length) {
+    bubble_sort(dizi, length);
+    return create_tree(dizi,length);
+}
 
 
 
@@ -27,17 +54,15 @@ int aralikta_olmayan_eleman_sayisi(TreeNode *root, int min, int max);
 // calculate the tree level, using number of items
 // dependents: pow_int()
 int get_level(int length) {
+
     int level = 0;
 
-    while(1) {
-        if (length < pow_int(2 , level)) {
-            level--;
-            break;
-        }
-        else
-            level++;
+    while (length > pow_int(2, level) -1) {
+        level++;
     }
-    return level;
+
+    return --level;
+
 }
 
 
@@ -45,7 +70,7 @@ int get_level(int length) {
 
 // calculate the level of binary tree
 int get_level_of(TreeNode *root) {
-    int right, left;
+    int right = 0, left = 0;
     if (root->left == NULL  && root->right == NULL) {
         return 0;
     }
@@ -77,52 +102,52 @@ int get_level_of(TreeNode *root) {
 
 // calculate the root index of sorted list using length
 // bagimliliklar: pow_int()
-int getRootIndex(int length) {
-    if (length == 1)
-        return 0;
-
+int get_root_index(int length) {
 
     int index;
-    int ust_ucgen_eleman_sayisi;  // level -1 e kadar olan tum elemanlar toplami
+    int n = get_level(length);
 
-    int level = get_level(length); // eleman sayisindan binary tree levelini hesapla
 
-    ust_ucgen_eleman_sayisi = pow_int(2, level ) -1;
+    int ust_ucgen_root = (pow_int(2, n-1 +1) -1 -1) / 2;
+    //printf("\nn: %d   ust ucen root: %d\n",n, ust_ucgen_root);
 
-    // System.out.println("level :" +level);
-    //System.out.println("ust ucgen eleman sayi: "  +ust_ucgen_eleman_sayisi);
 
-    if ((length - ust_ucgen_eleman_sayisi ) > pow_int(2, level-1) ) {
-        index = (ust_ucgen_eleman_sayisi-1) / 2 + pow_int(2,level-1);
-    }
-    else {
-        index = (ust_ucgen_eleman_sayisi-1) /2 + (length-ust_ucgen_eleman_sayisi);
-    }
+    int ust_ucgen_eleman_sayisi = pow_int(2, n -1 +1) - 1;
+
+    if (length - ust_ucgen_eleman_sayisi >= pow_int(2, n -1))
+        index = ust_ucgen_root + pow_int(2, n -1);
+    else
+        index = ust_ucgen_root + length - ust_ucgen_eleman_sayisi;
 
     return index;
+
 }
 
 
 
 
-// sirali bir int array[] i  binary tree ye donustur
-TreeNode *tree(int dizi[], int length) {
+// convert array to tree
+// for binary search tree use any sort func before call this func
+TreeNode *create_tree(int *dizi, int length) {
 
-    if (length < 0)
-        return 0;
+    if (length <= 0) {
+        return NULL;
+    }
 
     TreeNode *root = (TreeNode*) malloc(sizeof(TreeNode));
 
     if (length == 1) {
-        root->sayi = dizi[0];
+
+
+        root->data = dizi[0];
         root->left = NULL;
         root->right = NULL;
     }
     else if (length == 2) {
-        root->sayi = dizi[1];
+        root->data = dizi[1];
 
         TreeNode *left = (TreeNode*) malloc(sizeof(TreeNode));
-        left->sayi = dizi[0];
+        left->data = dizi[0];
         left->left = NULL;
         left->right = NULL;
 
@@ -131,18 +156,23 @@ TreeNode *tree(int dizi[], int length) {
     }
     else { // 3 ve uzeri
 
-        int root_index = getRootIndex(length);
-        root->sayi = dizi[root_index];
 
-        // root a gore
-        int *sol_dizi = (int *) malloc(sizeof(int));
-        int *sag_dizi = (int *) malloc(sizeof(int));
+        int root_index = get_root_index(length);
 
-        int key = 0, sol_index=0, sag_index =0;
+        root->data = dizi[root_index];
 
+
+        int sol_dizi[root_index];
+        int sag_dizi[length - root_index];
+
+        int sol_index = 0;
+        int sag_index= 0;
+
+        int key = 0;
         for (int i = 0; i < length; i++) {
             if (i == root_index) {
                 key = 1;
+
             }
             else {
                 if (key == 0) {
@@ -154,10 +184,30 @@ TreeNode *tree(int dizi[], int length) {
             }
         }
 
-        root->left = tree(sol_dizi, sol_index);
-        root->right = tree(sag_dizi, sag_index);
+
+        root->left = create_tree(sol_dizi, sol_index);
+        root->right = create_tree(sag_dizi, sag_index);
     }
     return root;
+}
+
+
+
+
+// return number of nodes
+int length_of_BT(TreeNode *root) {
+    int length = 0;
+
+    if (root != NULL)
+        length++;
+
+    if (root->left != NULL)
+        length += length_of_BT(root->left);
+    if (root->right != NULL)
+        length += length_of_BT(root->right);
+
+    return length;
+
 }
 
 
@@ -169,7 +219,7 @@ void print_level(TreeNode *root, int level, int tmpLevel) {
 
     // print leaf
     if (tmpLevel == level) {
-        printf("%d  ",root->sayi);
+        printf("%d  ",root->data);
     }
 
     else {
@@ -211,7 +261,7 @@ void print_tree2(TreeNode *root, int tmpLevel, int level) {
 
     // print leaf
     if (tmpLevel == level) {
-        printf("%d  ",root->sayi);
+        printf("%d  ",root->data);
     }
 
     else if (tmpLevel < level) {
@@ -235,20 +285,52 @@ void print_tree2(TreeNode *root, int tmpLevel, int level) {
 
 
 
-// binary tree deki 2 sayi asarisnda olmayan eleman sayisini bul
-int aralikta_olmayan_eleman_sayisi(TreeNode *root, int min, int max) {
-    if (root == NULL)
-        return 0;
+// heap sort icin
+// agacin son elamınını keserek roota yapıstır
+TreeNode *root_sil(TreeNode *root) {
+    TreeNode *iter = root;
 
-    int sonuc = 0;
+    int level = get_level_of(root);
+    int ust_ucgen = pow_int(2, level) -1;
+    int length = length_of_BT(root);
 
-    if(root->sayi < min  || root->sayi > max)
-        sonuc++;
+    // exception
+    if (length == 1 ) {
+        return NULL;
+    }
+
+    while (level > 1) { // en uc uclu elemana kadar ilerle
+
+        if (length - ust_ucgen <= pow_int(2, level - 1)) {  // son eleman rootun solunda, sola git
+            if (iter->left->left != NULL || iter->left->right != NULL) {
+                iter = iter->left;
+            }
+        }
+        else {  // son eleman rootun saginda, saga git
+            if (iter->right->left != NULL || iter->right->right != NULL) {
+                iter = iter->right;
+            }
+        }
+
+        level = get_level_of(iter);
+        ust_ucgen = pow_int(2, level) - 1;
+        length = length_of_BT(iter);
 
 
-    sonuc += aralikta_olmayan_eleman_sayisi(root->left, min, max);
-    sonuc += aralikta_olmayan_eleman_sayisi(root->right, min, max);
+    }
 
-    return sonuc;
+    // iki taraf bos
+    if (iter->right != NULL) { // sag yapragi sil
+        root->data = iter->right->data;  // son elemani root a kopyala
+        iter->right = NULL;              // son elemanin yerini sil
+    }
+
+    // sag yaprak bos
+    else if(iter->left != NULL) {
+        root->data = iter->left->data;    // almost complated binary tree varsayıyoruz
+        iter->left = NULL;
+    }
+
+    return root;
 
 }
