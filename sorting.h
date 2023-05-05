@@ -22,7 +22,7 @@ int partition(int array[], int l, int r);      // part of quick_sort()
 void bubble_sort(int *arr, int length) {
     int tmp = 0;
     for (int i = 0; i < length - 1; i++) {
-        for (int j = 0; j < length -2 -i; j++) {
+        for (int j = 0; j < length -1 -i; j++) {
             if (arr[j] > arr[j + 1]) {
                 tmp = arr[j];
                 arr[j] = arr[j+1];
