@@ -170,7 +170,7 @@ int pow_int(int num, int power) {
     // general calculations
     int result = 1;
     for (int i = 0; i< power;i++) {
-        result *= result;
+        result *= num;
     }
     return result;
 }

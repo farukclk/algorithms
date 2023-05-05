@@ -138,19 +138,18 @@ TreeNode *create_tree(int *dizi, int length) {
 
     if (length == 1) {
 
-
         root->data = dizi[0];
         root->left = NULL;
         root->right = NULL;
     }
     else if (length == 2) {
-        root->data = dizi[1];
-
+       
         TreeNode *left = (TreeNode*) malloc(sizeof(TreeNode));
         left->data = dizi[0];
         left->left = NULL;
         left->right = NULL;
 
+        root->data = dizi[1];
         root->left = left;
         root->right = NULL;
     }
@@ -163,7 +162,7 @@ TreeNode *create_tree(int *dizi, int length) {
 
 
         int sol_dizi[root_index];
-        int sag_dizi[length - root_index];
+        int sag_dizi[length - root_index - 1];
 
         int sol_index = 0;
         int sag_index= 0;
@@ -184,9 +183,15 @@ TreeNode *create_tree(int *dizi, int length) {
             }
         }
 
-
-        root->left = create_tree(sol_dizi, sol_index);
-        root->right = create_tree(sag_dizi, sag_index);
+        if (sol_index > 0)
+            root->left = create_tree(sol_dizi, sol_index);
+        else
+            root->left = NULL;
+        
+        if (sag_index > 0)
+            root->right = create_tree(sag_dizi, sag_index);
+        else
+            root->right = NULL;
     }
     return root;
 }
