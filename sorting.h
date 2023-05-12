@@ -5,14 +5,18 @@
 //---------------------------------------FUNCTIONS----------------------------------------
 
 void bubble_sort(int *arr, int length);
-Node2 *liste_basi(Node2 *list);                // return first node of list
-int heapfiy(TreeNode *root);
+void build_heap(int *arr, int length);                  // heap sort
+Node2 *liste_basi(Node2 *list);                         // return first node of list
+void heapify_array(int *arr, int index, int length);    // heap sort
+void heapify_tree(TreeNode *root);                       // heap sort
+void heap_sort(int *arr, int length);
 int is_sorted_recursive (Node *list);
 int is_sorted_iterative(Node *list);
 void merge_sort(int array[], int l, int r);
 void selectionSort(int array[], int length); 
 void quick_sort(int array[], int l, int r);
-int partition(int array[], int l, int r);      // part of quick_sort()
+int partition(int array[], int l, int r);               // part of quick_sort()
+void swap(int *a, int *b);
 //-----------------------------------------------------------------------------------------
 
 
@@ -46,66 +50,101 @@ Node2 *liste_basi(Node2 *list) {
 
 
 
+// min-heap
+void heapify_array(int *arr, int index, int length) {
+    int left = index * 2 ;
+    int right = left + 1;
+
+    // iki taraf da null
+    if (length < left) {
+        return;
+    }
+        // sag node null
+    else if (length == left) {
+        if (arr[left-1] < arr[index-1]) {
+            swap(&arr[left-1], &arr[index-1]);
+        }
+    }
+    else {
+        if (arr[index-1] < arr[left-1] && arr[index-1] < arr[right-1])
+            return;
+        else {
+            if (arr[left-1] < arr[right-1]) {
+                swap(&arr[left-1], &arr[index-1]);
+                heapify_array(arr, left, length);
+            }
+            else {
+                swap(&arr[right-1], &arr[index-1]);
+                heapify_array(arr, right, length);
+            }
+        }
+    }
+}
+
+
+
+
 // Min-Heap
 // part of heap sort algorithm
-int heapfiy(TreeNode *root) {
-    int tmp;
-    int key;
+void heapify_tree(TreeNode *root) {
 
     if (root == NULL) {
-        return 0;
+        return;
     }
 
     // yapraksa, iki taraf null oldugu durum, kıasy yapıcak baska eleman yok
-    if (root->left == NULL && root->right == NULL) {
-        return 0;
+    else if (root->left == NULL && root->right == NULL) {
+        return;
     }
 
     // sag null ise
     else if(root->left != NULL  && root->right == NULL) {
-         if (root->left->data < root->data) {
-             tmp = root->data;
-             root->data = root->left->data;
-             root->left->data = tmp;
-             return 1;
-         }
-         else
-             return 0;
+         if (root->left->data < root->data)  
+            swap(&root->left->data, &root->data);
     }
-
 
     // iki tarf dolu ise
     else {
+        // subtree lere gec
+        heapify_tree(root->left);
+        heapify_tree(root->right);
+         
 
-        do {
-            key = 0;
-            // uclu karsilastirmalari yap
+        // uclu karsilastirmalari yap
+        // left node en kucuk ise 
+        if (root->left->data <= root->right->data &&  root->left->data < root->data) {
+            swap(&root->left->data, &root->data);
+            heapify_tree(root->left);
+        }
+        // right node en kucuk ise
+        else if (root->left->data >= root->right->data &&  root->right->data < root->data) {
+            swap(&root->right->data, &root->data);
+            heapify_tree(root->right);
+        }            
+   }
+}
 
-            // left node en kucuk ise
-            if (root->left->data < root->right->data &&  root->left->data < root->data) {
-                tmp = root->data;
-                root->data = root->left->data;
-                root->left->data = tmp;
-                key = 1;
-            }
-                // right node en kucuk ise
-            else if (root->left->data > root->right->data &&  root->right->data < root->data) {
-                tmp = root->data;
-                root->data = root->right->data;
-                root->right->data = tmp;
-                key = 1;
-            }
 
-            // subtree lere gec
-            if (root->left != NULL)
-                key += heapfiy(root->left);
-            if (root->right != NULL)
-                key += heapfiy(root->right);
 
-        } while (key > 0);
 
+// min-heap
+void build_heap(int *arr, int length) {
+    int floor = length / 2;
+    for (int i = floor; i >= 1; i--) {
+        heapify_array(arr, i, length);
     }
-    return 0;
+}
+
+
+
+
+// max to min
+void heap_sort(int *arr, int length) {
+    build_heap(arr, length);
+    while (length > 1) {
+        swap(&arr[0], &arr[length -1]);
+        heapify_array(arr, 1, --length);
+    }
 }
 
 
@@ -276,4 +315,13 @@ void quickSort(int arr[], int l, int r) {
         quickSort(arr, l, p - 1);
         quickSort(arr, p + 1, r);
     }
+}
+
+
+
+
+void swap(int *a, int *b) {
+    int tmp = *a;
+    *a = *b;
+    *b = tmp;
 }
