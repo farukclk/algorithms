@@ -6,14 +6,15 @@
 
 void bubble_sort(int *arr, int length);
 void build_heap(int *arr, int length);                  // heap sort
-Node2 *liste_basi(Node2 *list);                         // return first node of list
+Node2 *liste_basi(Node2 *list);                         // return head of the list
 void heapify_array(int *arr, int index, int length);    // heap sort
-void heapify_tree(TreeNode *root);                       // heap sort
+void heapify_tree(Tree *root);                          // heap sort
 void heap_sort(int *arr, int length);
+void insertion_sort(int *arr, int length);
 int is_sorted_recursive (Node *list);
 int is_sorted_iterative(Node *list);
 void merge_sort(int array[], int l, int r);
-void selectionSort(int array[], int length); 
+void selection_sort(int array[], int length);
 void quick_sort(int array[], int l, int r);
 int partition(int array[], int l, int r);               // part of quick_sort()
 void swap(int *a, int *b);
@@ -86,7 +87,7 @@ void heapify_array(int *arr, int index, int length) {
 
 // Min-Heap
 // part of heap sort algorithm
-void heapify_tree(TreeNode *root) {
+void heapify_tree(Tree *root) {
 
     if (root == NULL) {
         return;
@@ -147,6 +148,28 @@ void heap_sort(int *arr, int length) {
     }
 }
 
+
+
+
+void insertion_sort(int *arr, int length) {
+    int j;
+    int tmp;
+
+    for (int i = 1; i < length; i++) {
+        j = i;
+        tmp = arr[j];
+
+        while (j >= 1) {
+            if (arr[j - 1] > arr[j]) {
+                arr[j] = arr[j - 1];
+                arr[j - 1] = tmp;
+                j--;
+            }
+            else
+                break;
+        }
+    }
+}
 
 
 
@@ -247,7 +270,7 @@ void merge_sort(int arr[], int l, int r) {
 
 
 // array[] sirala.  n = dizi uzunlugu. n verilmek zorunda yoksa NULL lar 0 olarak en basa siralanair
-void selectionSort(int dizi[], int n) {
+void selection_sort(int dizi[], int n) {
 
     int tmp, min_index;
     for (int i=0; i<n; i++) {

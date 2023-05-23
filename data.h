@@ -14,9 +14,9 @@ typedef struct node2 {
 
 
 // binary tree node
-typedef struct treeNode {
+typedef struct Tree {
     int data;
-    struct treeNode *left;
-    struct treeNode *right;
-} TreeNode;
+    struct Tree *left;
+    struct Tree *right;
+} Tree;
 
