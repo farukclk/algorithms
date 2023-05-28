@@ -12,9 +12,7 @@
 <h2>Math Functions</h2>
 <ul>
   <li>decimal_to_binary</li>
-  <li>Merge sort</li>
   <li>is_primet</li>
-  <li>Merge sort</li>
   <li>rev_intt</li>
   <li>pow_int</li>
 </ul>
