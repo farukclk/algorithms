@@ -294,7 +294,7 @@ void selection_sort(int dizi[], int n) {
 
 
 // sort only one number(pivot)
-// part of merge sort algorithm
+// part of quick sort algorithm
 int partition(int arr[], int l, int r) {
 
     if ( l >= r )
@@ -305,7 +305,7 @@ int partition(int arr[], int l, int r) {
     int j = r;
     int tmp;
 
-    while (j > i) {
+    while (j >= i) {
         while (arr[i] <= p) {
             i++;
         }
@@ -332,11 +332,11 @@ int partition(int arr[], int l, int r) {
 
 
 
-void quickSort(int arr[], int l, int r) {
+void quick_sort(int arr[], int l, int r) {
     if (l < r) {
         int p = partition(arr, l, r);
-        quickSort(arr, l, p - 1);
-        quickSort(arr, p + 1, r);
+        quick_sort(arr, l, p -1);
+        quick_sort(arr, p + 1, r);
     }
 }
 
