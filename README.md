@@ -6,15 +6,16 @@
 </ul>
 
 <br>
-<h2>Graphs</h2>
+<h2>Searching Algorithms</h2>
 <ul>
-  <li>dijkstra algorithm</li>
+  <li>Dijkstra algorithm</li>
 </ul>
 
 <br>
 <h2>Sorting Algorithms</h2>
 <ul>
   <li>Bubble sort</li>
+  <li>Heap sort</li>
   <li>Insertion sort</li>
   <li>Merge sort</li>
   <li>Selection sort</li>
