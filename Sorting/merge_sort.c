@@ -56,18 +56,19 @@ void merge_sort(int arr[], int l, int r) {
 
 int main(void) {
 
+    int length = 7;
     int arr[7] = { -1, 3, 4, 44, -2, 34, 2 };
 
-    for(int i=0; i<7; i++) {
+    for(int i=0; i < length; i++) {
         printf("%d  ", arr[i]);
     }
-    printf("\t\n");
+    printf("\n");
 
 
-    merge_sort(arr, 0, 6);
+    merge_sort(arr, 0, length - 1);
 
 
-    for(int i=0; i<7; i++) {
+    for(int i = 0; i < length; i++) {
         printf("%d  ", arr[i]);
     }
     printf("\t(sorted)\n");

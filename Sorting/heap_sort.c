@@ -21,7 +21,7 @@ void heapify_array(int *arr, int index, int length) {
     if (length < left) {
         return;
     }
-        // sag node null
+    // sag node null
     else if (length == left) {
         if (arr[left-1] < arr[index-1]) {
             swap(&arr[left-1], &arr[index-1]);
@@ -47,7 +47,7 @@ void heapify_array(int *arr, int index, int length) {
 
 
 // Min-Heap
-void heapify_tree(Tree *root) {
+void heapify_tree(TreeNode *root) {
 
     if (root == NULL) {
         return;
@@ -90,10 +90,10 @@ void heapify_tree(Tree *root) {
 
 // min-heap
 void build_heap(int *arr, int length) {
-    int floor = length / 2;
-    for (int i = floor; i >= 1; i--) {
+    
+    for (int i = length / 2; i >= 1; i--) 
         heapify_array(arr, i, length);
-    }
+        
 }
 
 
@@ -101,14 +101,12 @@ void build_heap(int *arr, int length) {
 
 // max to min
 void heap_sort(int *arr, int length) {
-    int tmp; // for swap
+  
     build_heap(arr, length);
-    while (length > 1) {
-        tmp = arr[length - 1];
-        arr[length - 1] = arr[0];
-        arr[0] = tmp;
 
-        heapify_array(arr, 1, --length);
+    while (length > 1) {
+        swap(&arr[0], &arr[--length]);
+        heapify_array(arr, 1, length);
     }
 }
 

@@ -9,6 +9,7 @@
 <h2>Searching Algorithms</h2>
 <ul>
   <li>Dijkstra algorithm</li>
+  <li>Prims algorithm<li>
 </ul>
 
 <br>

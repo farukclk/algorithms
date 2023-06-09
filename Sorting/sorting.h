@@ -4,9 +4,9 @@
 
 //---------------------------------------FUNCTIONS----------------------------------------
 
-Node2 *liste_basi(Node2 *list);                         // return head of the list
-int is_sorted_recursive (Node *list);
-int is_sorted_iterative(Node *list);
+ListNode2 *liste_basi(ListNode2 *list);                         // return head of the list
+int is_sorted_recursive (ListNode *list);
+int is_sorted_iterative(ListNode *list);
 void swap(int *a, int *b);
 //-----------------------------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ void swap(int *a, int *b);
 
 
 // cift yolnu bagli listede basa don
-Node2 *liste_basi(Node2 *list) {
+ListNode2 *liste_basi(ListNode2 *list) {
     while (list->prev != NULL) {
         list = list->prev;
     }
@@ -27,7 +27,7 @@ Node2 *liste_basi(Node2 *list) {
 
 
 
-int is_sorted_iterative(Node *list) {
+int is_sorted_iterative(ListNode *list) {
 
     while(list->next != NULL) {
 
@@ -44,7 +44,7 @@ int is_sorted_iterative(Node *list) {
 
 
 
-int is_sorted_recursive(Node *list) {
+int is_sorted_recursive(ListNode *list) {
 
     if (list->next ==  NULL)
         return 1;

@@ -1,29 +1,29 @@
 #include <stdio.h>
-#include "mathematic.h"
+#include "mathematics.h"
 #include "data.h"
 
 
 
 //---------------------------------------FUNCTIONS----------------------------------------
 
-int aralikta_olmayan_eleman_sayisi(Tree *root, int min, int max);
-Tree *create_BST(int *dizi, int length);
-Tree *create_tree(int *dizi, int length);               // generate binary tree from int array[]
-int length_of_BT(Tree *root);
+int aralikta_olmayan_eleman_sayisi(TreeNode *root, int min, int max);
+TreeNode *create_BST(int arr[], int length);
+TreeNode *create_BT(int arr[], int length);                 // create binary tree from int array[]
+int size_of_BT(TreeNode *root);
 int get_level(int length);                              // calculate level of full and complated binary trees using number of items
-int get_level_of(Tree *root);                           // calculate level of binary tree
+int get_level_of(TreeNode *root);                           // calculate level of binary tree
 int get_root_index(int length);                         // return root index as a full or complate binary tree
-void print_tree(Tree *root);                            // print binary tree level order
-void print_tree2(Tree *root, int tmp, int level);
-void print_level(Tree *root, int level, int tmp);
-Tree *root_sil(Tree *tree);
+void print_tree(TreeNode *root);                            // print binary tree level order
+void print_tree2(TreeNode *root, int tmp, int level);
+void print_level(TreeNode *root, int level, int tmp);
+TreeNode *root_sil(TreeNode *tree);
 //-----------------------------------------------------------------------------------------
 
 
 
 
 // binary tree deki 2 sayi asarisnda olmayan eleman sayisini bul
-int aralikta_olmayan_eleman_sayisi(Tree *root, int min, int max) {
+int aralikta_olmayan_eleman_sayisi(TreeNode *root, int min, int max) {
     if (root == NULL)
         return 0;
 
@@ -59,9 +59,9 @@ void __bubble_sort(int *arr, int length) {
 
 
 
-Tree *create_BST(int *dizi, int length) {
+TreeNode *create_BST(int *dizi, int length) {
     __bubble_sort(dizi, length);
-    return create_tree(dizi,length);
+    return create_BT(dizi, length);
 }
 
 
@@ -85,7 +85,7 @@ int get_level(int length) {
 
 
 // calculate the level of binary tree
-int get_level_of(Tree *root) {
+int get_level_of(TreeNode *root) {
     int right = 0, left = 0;
 
     if (root == NULL)
@@ -148,13 +148,14 @@ int get_root_index(int length) {
 
 // convert array to tree
 // for binary search tree use any sort func before call this func
-Tree *create_tree(int *dizi, int length) {
+// In-order traversal
+TreeNode *create_BT(int dizi[], int length) {
 
     if (length <= 0) {
         return NULL;
     }
 
-    Tree *root = (Tree*) malloc(sizeof(Tree));
+    TreeNode *root = (TreeNode*) malloc(sizeof(TreeNode));
 
     if (length == 1) {
 
@@ -164,7 +165,7 @@ Tree *create_tree(int *dizi, int length) {
     }
     else if (length == 2) {
 
-        Tree *left = (Tree*) malloc(sizeof(Tree));
+        TreeNode *left = (TreeNode *) malloc(sizeof(TreeNode));
         left->data = dizi[0];
         left->left = NULL;
         left->right = NULL;
@@ -203,8 +204,8 @@ Tree *create_tree(int *dizi, int length) {
             }
         }
         
-        root->left = create_tree(sol_dizi, sol_index);
-        root->right = create_tree(sag_dizi, sag_index);
+        root->left = create_BT(sol_dizi, sol_index);
+        root->right = create_BT(sag_dizi, sag_index);
  
     }
     return root;
@@ -214,17 +215,17 @@ Tree *create_tree(int *dizi, int length) {
 
 
 // return number of nodes
-int length_of_BT(Tree *root) {
+int size_of_BT(TreeNode *root) {
 
     if (root == NULL)
         return 0;
 
-    int length = 1;    
+    int size = 1;
   
-    length += length_of_BT(root->left);
-    length += length_of_BT(root->right);
+    size += size_of_BT(root->left);
+    size += size_of_BT(root->right);
 
-    return length;
+    return size;
 }
 
 
@@ -232,13 +233,13 @@ int length_of_BT(Tree *root) {
 
 // print items by level
 // you have to set up tmpLevel as 0 when you call this function.
-void print_level(Tree *root, int level, int tmpLevel) {
+void print_level(TreeNode *root, int level, int tmpLevel) {
     
     if (root == NULL)
         return;
 
     else if (tmpLevel == level) {
-        printf("%c  ",root->data);
+        printf("%d  ",root->data);
     }
 
     else {
@@ -254,7 +255,7 @@ void print_level(Tree *root, int level, int tmpLevel) {
 // print items base level order
 // you have to set up tmpLevel as 0 when you call this function.
 // dependents: get_level_of()
-void print_tree(Tree *root) {
+void print_tree(TreeNode *root) {
 
     int level =  get_level_of(root);
 
@@ -272,7 +273,7 @@ void print_tree(Tree *root) {
 // you have to set up tmpLevel as 0 when you call this function.
 // printLevel(root, 0, get_level_of(root);
 // dependents: get_level_of()
-void print_tree2(Tree *root, int tmpLevel, int level) {
+void print_tree2(TreeNode *root, int tmpLevel, int level) {
 
     // print leaf
     if (tmpLevel == level) {
@@ -302,12 +303,12 @@ void print_tree2(Tree *root, int tmpLevel, int level) {
 
 // heap sort icin
 // agacin son elamınını keserek roota yapıstır
-Tree *root_sil(Tree *root) {
-    Tree *iter = root;
+TreeNode *root_sil(TreeNode *root) {
+    TreeNode *iter = root;
 
     int level = get_level_of(root);
     int ust_ucgen = pow_int(2, level) -1;
-    int length = length_of_BT(root);
+    int length = size_of_BT(root);
 
     // exception
     if (length == 1 ) {
@@ -329,7 +330,7 @@ Tree *root_sil(Tree *root) {
 
         level = get_level_of(iter);
         ust_ucgen = pow_int(2, level) - 1;
-        length = length_of_BT(iter);
+        length = size_of_BT(iter);
 
 
     }

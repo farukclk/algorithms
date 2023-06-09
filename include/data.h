@@ -2,7 +2,7 @@
 typedef struct node {
     int data;
     struct node *next;
-} Node;
+} ListNode;
 
 
 // cift yonlu node
@@ -10,7 +10,7 @@ typedef struct node2 {
     int data;
     struct node2 *prev;
     struct node2 *next;
-} Node2;
+} ListNode2;
 
 
 // binary tree node
@@ -18,5 +18,5 @@ typedef struct Tree {
     int data;
     struct Tree *left;
     struct Tree *right;
-} Tree;
+} TreeNode;
 

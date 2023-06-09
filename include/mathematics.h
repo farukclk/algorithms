@@ -6,7 +6,7 @@
 
 int basamak_sayisi(int sayi);              // sayinin basamak sayisi
 int bolen_derecesi(int sayi, int bolen);
-int decimal_to_binary(int sayi, int us);
+int decimal_to_binary(int num);            // iterative
 int get_random(int min, int max);          // generate random int between 2 number
 int is_harshad_num(int num);
 int is_lasa_num(int num);
@@ -46,6 +46,24 @@ int bolen_derecesi(int sayi, int  bolen) {
         sayi /= bolen;
     }
     return us;
+}
+
+
+
+
+// iterative
+int decimal_to_binary(int num) {
+    int result = 0;
+    int coefficient = 0;
+    int remainder;
+
+    while(num > 0) {
+        remainder = num % 2;
+        result += remainder * pow_int(10, coefficient++);
+        num /= 2;
+    }
+       
+    return result;
 }
 
 
@@ -178,25 +196,7 @@ int pow_int(int num, int power) {
 
 
 
-// us = 0
-int decimal_to_binary(int sayi, int us ) {
-   int binary = 0;
 
-   if (sayi == 0) {
-       return 0;
-   }
 
-   int kalan = sayi % 2;
-   int bolum = sayi / 2;
 
-   if (bolum == 0 && kalan == 1) {
-       return 1 * pow_int(10, us);
-   }
-   else {
-       binary += decimal_to_binary(sayi / 2, us + 1);
 
-       binary += kalan * pow_int(10, us);
-
-   }
-    return binary;
-}
